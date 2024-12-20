@@ -1,0 +1,170 @@
+CRUD COURS:
+crud.h
+#ifndef COURS_H
+#define COURS_H
+
+#define MAX_COURS 100
+
+// Structure pour représenter un cours
+typedef struct {
+    int id;
+    char nom[50];
+} Cours;
+
+// Variables globales pour stocker les cours
+extern Cours cours[MAX_COURS];
+extern int nbCours;
+
+// Déclarations des fonctions
+void ajouterCours(int id, const char* nom);
+void modifierCours(int id, const char* nouveauNom);
+void supprimerCours(int id);
+void afficherCours();
+
+#endif // COURS_H
+
+Crud.c
+#ifndef COURS_C
+#define COURS_C
+
+#define MAX_COURS 100
+
+// Structure pour représenter un cours
+typedef struct {
+    int id;
+    char nom[50];
+} Cours;
+
+// Variables globales pour stocker les cours
+extern Cours cours[MAX_COURS];
+extern int nbCours;
+
+// Déclarations des fonctions
+void ajouterCours(int id, const char* nom);
+void modifierCours(int id, const char* nouveauNom);
+void supprimerCours(int id);
+void afficherCours();
+Code.c::
+#endif // COURS_C
+
+#include <stdio.h>
+#include <string.h>
+
+#define MAX_COURS 100
+
+typedef struct {
+    int id;
+    char nom[50];
+} Cours;
+
+Cours cours[MAX_COURS];
+int nbCours = 0;
+
+// Fonction pour ajouter un cours
+void ajouterCours(int id, const char* nom) {
+    if (nbCours >= MAX_COURS) {
+        printf("Erreur : La liste des cours est pleine.\n");
+        return;
+    }
+
+    cours[nbCours].id = id;
+    strncpy(cours[nbCours].nom, nom, sizeof(cours[nbCours].nom) - 1);
+    nbCours++;
+    printf("Cours ajouté avec succès.\n");
+}
+
+// Fonction pour modifier un cours
+void modifierCours(int id, const char* nouveauNom) {
+    int i;
+    for ( i = 0; i < nbCours; i++) {
+        if (cours[i].id == id) {
+            strncpy(cours[i].nom, nouveauNom, sizeof(cours[i].nom) - 1);
+            printf("Cours modifié avec succès.\n");
+            Return;
+        }
+    }
+    printf("Erreur : Cours avec ID %d introuvable.\n", id);
+}
+
+// Fonction pour supprimer un cours
+void supprimerCours(int id) {
+    int i;
+    int j;
+    for ( i = 0; i < nbCours; i++) {
+        if (cours[i].id == id) {
+            // Décaler les éléments pour combler l'espace
+            for ( j = i; j < nbCours - 1; j++) {
+                cours[j] = cours[j + 1];
+            }
+            nbCours--;
+            printf("Cours supprimé avec succès.\n");
+            return;
+        }
+    }
+    printf("Erreur : Cours avec ID %d introuvable.\n", id);
+}
+
+// Fonction pour afficher tous les cours
+void afficherCours() {
+    if (nbCours == 0) {
+        printf("Aucun cours enregistré.\n");
+        return;
+    }
+
+    printf("\n--- Liste des cours ---\n");
+    int i;
+    for ( i = 0; i < nbCours; i++) {
+        printf("ID : %d, Nom : %s\n", cours[i].id, cours[i].nom);
+    }
+}
+
+int main() {
+    int choix, id;
+    char nom[50];
+
+    while (1) {
+        printf("\n--- Gestion des cours ---\n");
+        printf("1. Ajouter un cours\n");
+        printf("2. Modifier un cours\n");
+        printf("3. Supprimer un cours\n");
+        printf("4. Afficher tous les cours\n");
+        printf("5. Quitter\n");
+        printf("Entrez votre choix : ");
+        scanf("%d", &choix);
+
+        switch (choix) {
+            case 1:
+                printf("Entrez l'ID du cours : ");
+                scanf("%d", &id);
+                printf("Entrez le nom du cours : ");
+                scanf(" %[^\n]", nom);
+                ajouterCours(id, nom);
+                break;
+
+            case 2:
+                printf("Entrez l'ID du cours à modifier : ");
+                scanf("%d", &id);
+                printf("Entrez le nouveau nom du cours : ");
+                scanf(" %[^\n]", nom);
+                modifierCours(id, nom);
+                break;
+
+            case 3:
+                printf("Entrez l'ID du cours à supprimer : ");
+                scanf("%d", &id);
+                supprimerCours(id);
+                break;
+
+            case 4:
+                afficherCours();
+                break;
+
+            case 5:
+                printf("Au revoir !\n");
+                return 0;
+
+            default:
+                printf("Choix invalide. Veuillez réessayer.\n");
+        }
+    }
+}
